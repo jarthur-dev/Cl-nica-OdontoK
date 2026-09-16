@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦷 Odonto K - Landing Page Institucional & Conversão
 
-## Getting Started
+Uma landing page moderna, responsiva e focada em conversão desenvolvida para a clínica odontológica **Odonto K**, com unidades em São Lourenço da Mata e Vitória de Santo Antão (PE).
 
-First, run the development server:
+## 🚀 Demonstração
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Link do Projeto:** [Acessar Projeto na Vercel](https://odonto-k-landing-page.vercel.app) *(substitua pelo seu link real)*
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Funcionalidades Principais
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **🟢 Indicator de Status em Tempo Real:** Verifica automaticamente o horário local do usuário e exibe se a clínica está aberta ou fechada (com indicador LED animado piscando).
+- **📅 Quadro de Horários Interativo:** Popover/dropdown dinâmico detalhando o horário de funcionamento completo para cada dia da semana.
+- **📍 Seletor Multi-Unidades:** Permite ao cliente alternar entre as unidades (São Lourenço da Mata / Vitória de Santo Antão) e direciona para o WhatsApp correto com mensagem pré-formatada.
+- **📱 Design Mobile-First & Responsivo:** Layout fluido adaptado para smartphones, tablets e desktops com interface escura (*Dark Mode*) de alto contraste.
+- **📄 Transparência & Conformidade:** Links diretos para os responsáveis técnicos e serviços da clínica.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Tecnologias Utilizadas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework:** [Next.js](https://nextjs.org/) (React)
+- **Estilização:** [Tailwind CSS](https://tailwindcss.com/)
+- **Ícones:** [Lucide React](https://lucide.dev/)
+- **Linguagem:** TypeScript
+- **Deploy:** [Vercel](https://vercel.com/)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 📂 Como rodar o projeto localmente
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/SEU_USUARIO/odonto-k-landing-page.git](https://github.com/SEU_USUARIO/odonto-k-landing-page.git)
