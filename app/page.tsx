@@ -1,69 +1,335 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { 
+  MapPin, 
+  Heart, 
+  Award, 
+  ChevronRight,
+  Stethoscope,
+  Smile,
+  Camera,
+  Clock,
+  ShieldCheck,
+  MessageCircle,
+  FileText,
+  ExternalLink,
+  ChevronDown
+} from 'lucide-react';
+
+const TRATAMENTOS = [
+  {
+    id: 'sedacao',
+    titulo: 'Sedação Moderada',
+    descricao: 'Acolhimento especial para quem busca realizar tratamentos odontológicos com máximo conforto, segurança e sem ansiedade.',
+    icone: Heart,
+    destaque: true,
+  },
+  {
+    id: 'especialidades',
+    titulo: 'Todos os Serviços',
+    descricao: 'Ortodontia, Implantes, Próteses, Endodontia e Clínica Geral. Atendimento completo para toda a sua família.',
+    icone: Stethoscope,
+  },
+  {
+    id: 'estetica',
+    titulo: 'Estética do Sorriso',
+    descricao: 'Clareamento dental, facetas em resina e tratamentos estéticos modernos para devolver a harmonia do seu sorriso.',
+    icone: Smile,
+  },
+];
+
+const UNIDADES = {
+  slm: {
+    id: 'slm',
+    nome: 'São Lourenço da Mata',
+    curto: 'São Lourenço',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K%20-%20Unidade%20São%20Lourenço%20da%20Mata.',
+  },
+  vitoria: {
+    id: 'vitoria',
+    nome: 'Vitória de Santo Antão',
+    curto: 'Vitória',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K%20-%20Unidade%20Vitória%20de%20Santo%20Antão.',
+  },
+};
+
+const HORARIOS_FUNCIONAMENTO = [
+  { dia: 'Segunda-feira', horario: '08:00–17:00' },
+  { dia: 'Terça-feira', horario: '08:00–17:00' },
+  { dia: 'Quarta-feira', horario: '08:00–17:00' },
+  { dia: 'Quinta-feira', horario: '08:00–17:00' },
+  { dia: 'Sexta-feira', horario: '08:00–17:00' },
+  { dia: 'Sábado', horario: '08:00–17:00' },
+  { dia: 'Domingo', horario: 'Fechado' },
+];
+
+const LINK_RESPONSAVEIS_TECNICOS = 'https://drive.google.com/file/d/1K0oN7x12z2V-9r1qDqWr7EyA2ms5Pkhm/view';
 
 export default function Home() {
+  const [unidadeAtiva, setUnidadeAtiva] = useState<'slm' | 'vitoria'>('slm');
+  const [estaAberto, setEstaAberto] = useState<boolean>(false);
+  const [mostrarHorarios, setMostrarHorarios] = useState<boolean>(false);
+
+  const unidadeAtual = UNIDADES[unidadeAtiva];
+
+  // Verifica o horário local para calcular se a clínica está aberta (Seg-Sáb 08:00 às 17:00)
+  useEffect(() => {
+    const checarStatusAtendimento = () => {
+      const agora = new Date();
+      const diaSemana = agora.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+      const hora = agora.getHours();
+
+      if (diaSemana >= 1 && diaSemana <= 6 && hora >= 8 && hora < 17) {
+        setEstaAberto(true);
+      } else {
+        setEstaAberto(false);
+      }
+    };
+
+    checarStatusAtendimento();
+    const intervalo = setInterval(checarStatusAtendimento, 60000); // Atualiza a cada minuto
+    return () => clearInterval(intervalo);
+  }, []);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
+      
+      {/* Topo Informativo */}
+      <div className="bg-slate-900 border-b border-slate-800/80 px-4 py-2 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+        <ShieldCheck size={14} className="text-indigo-400" />
+        <span>Referência em Atendimento Humanizado e Sedação Moderada</span>
+      </div>
+
+      {/* Header Profissional com Dropdown de Horários */}
+      <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-6 md:px-12 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-600/20">
+            OK
+          </div>
+          <div>
+            <h1 className="font-bold text-lg text-white leading-tight tracking-tight">Odonto K</h1>
+            <p className="text-xs text-slate-400 font-medium">Clínica Odontológica</p>
+          </div>
+        </div>
+
+        {/* Botão de Status e Menu Dropdown de Horários */}
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setMostrarHorarios(!mostrarHorarios)}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-200 hover:border-slate-700 transition active:scale-95 shadow-sm"
+          >
+            <span className="relative flex h-2.5 w-2.5">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${estaAberto ? 'bg-emerald-400' : 'bg-red-400'}`}></span>
+              <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${estaAberto ? 'bg-emerald-500' : 'bg-red-500'}`}></span>
+            </span>
+            <span className="font-semibold">{estaAberto ? 'Aberto agora' : 'Fechado agora'}</span>
+            <ChevronDown size={14} className={`text-slate-400 transition-transform duration-200 ${mostrarHorarios ? 'rotate-180' : ''}`} />
+          </button>
+
+          {/* Modal / Card Flutuante com Quadro de Horários */}
+          {mostrarHorarios && (
+            <>
+              {/* Overlay invisível para fechar ao clicar fora */}
+              <div 
+                className="fixed inset-0 z-40" 
+                onClick={() => setMostrarHorarios(false)} 
+              />
+              <div className="absolute right-0 mt-2 w-64 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-2xl z-50 text-xs space-y-3 animate-in fade-in slide-in-from-top-2">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div className="flex items-center gap-1.5 font-bold text-slate-200">
+                    <Clock size={15} className="text-indigo-400" />
+                    <span>Horário de Funcionamento</span>
+                  </div>
+                  <span className={`font-bold ${estaAberto ? 'text-emerald-400' : 'text-red-400'}`}>
+                    {estaAberto ? 'Aberto' : 'Fechado'}
+                  </span>
+                </div>
+
+                <div className="space-y-1.5">
+                  {HORARIOS_FUNCIONAMENTO.map((item, idx) => (
+                    <div key={idx} className="flex justify-between items-center text-slate-300 py-0.5">
+                      <span className="text-slate-400">{item.dia}</span>
+                      <span className="font-mono font-medium text-slate-200">{item.horario}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="px-6 md:px-12 py-16 sm:py-20 max-w-4xl mx-auto text-center space-y-6">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider">
+          <Award size={14} className="text-indigo-400" />
+          Medicina e Saúde
+        </div>
+
+        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white">
+          Cuidado humanizado e acolhedor para <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-300">o seu sorriso</span>.
+        </h2>
+
+        <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+          Atendimento odontológico de excelência com todos os tratamentos em um só lugar. Referência em sedação moderada. Selecione a unidade e fale diretamente conosco no WhatsApp.
+        </p>
+
+        {/* Seletor de Unidades */}
+        <div className="pt-4 max-w-sm mx-auto">
+          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
+            Onde deseja atendimento?
+          </p>
+          <div className="bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex gap-1.5 shadow-inner">
+            <button
+              type="button"
+              onClick={() => setUnidadeAtiva('slm')}
+              className={`flex-1 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                unidadeAtiva === 'slm'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <MapPin size={15} /> {UNIDADES.slm.curto}
+            </button>
+            <button
+              type="button"
+              onClick={() => setUnidadeAtiva('vitoria')}
+              className={`flex-1 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                unidadeAtiva === 'vitoria'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
             >
-              Learning
-            </a>{" "}
-            center.
+              <MapPin size={15} /> {UNIDADES.vitoria.curto}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Cards de Serviços */}
+      <section className="max-w-5xl mx-auto px-6 md:px-12 py-12 space-y-10">
+        <div className="text-center space-y-2">
+          <h3 className="text-2xl sm:text-3xl font-bold text-white">
+            Nossos Serviços & Especialidades
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-400">
+            Confiança e tecnologia para transformar o seu sorriso em Pernambuco.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {TRATAMENTOS.map((item) => {
+            const Icone = item.icone;
+            return (
+              <div
+                key={item.id}
+                className="group relative bg-slate-900/90 border border-slate-800 rounded-2xl p-7 space-y-4 transition-all duration-300 ease-out hover:border-indigo-500 hover:scale-105 hover:bg-slate-900 hover:shadow-xl hover:shadow-indigo-500/10 cursor-pointer flex flex-col justify-between"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-12 h-12 rounded-xl bg-slate-800 text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white flex items-center justify-center transition-colors duration-300 border border-slate-700/60">
+                      <Icone size={24} />
+                    </div>
+                    {item.destaque && (
+                      <span className="text-[10px] uppercase font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                        Sua referência
+                      </span>
+                    )}
+                  </div>
+                  <h4 className="font-bold text-lg text-white group-hover:text-indigo-300 transition-colors">
+                    {item.titulo}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                    {item.descricao}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </main>
+      </section>
+
+      {/* Botões de Ação */}
+      <section className="px-6 py-10 mt-4 max-w-md mx-auto w-full space-y-3">
+        <a
+          href={unidadeAtual.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-2xl transition-all duration-200 text-base shadow-xl shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] w-full"
+        >
+          <MessageCircle size={20} />
+          Agendar em {unidadeAtual.nome}
+          <ChevronRight size={18} />
+        </a>
+
+        <a
+          href={LINK_RESPONSAVEIS_TECNICOS}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-slate-800/80 text-slate-200 border border-slate-800 font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 text-sm hover:border-slate-700 hover:scale-[1.01] active:scale-[0.99] w-full shadow-sm"
+        >
+          <FileText size={18} className="text-indigo-400" />
+          <span>Responsáveis Técnicos</span>
+          <ExternalLink size={14} className="text-slate-500" />
+        </a>
+      </section>
+
+      {/* Footer Profissional */}
+      <footer className="bg-slate-950 border-t border-slate-800/80 px-6 md:px-12 py-12 mt-auto text-xs text-slate-400">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">
+                OK
+              </div>
+              <span className="font-bold text-slate-200 text-sm">Odonto K</span>
+            </div>
+            <p className="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
+              Cuidado humanizado e atendimento acolhedor. Referência em sedação moderada em Pernambuco.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <h5 className="font-bold text-slate-200 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <MapPin size={14} className="text-indigo-400" /> Unidades Atendidas
+            </h5>
+            <p>• São Lourenço da Mata / PE</p>
+            <p>• Vitória de Santo Antão / PE</p>
+          </div>
+
+          <div className="space-y-3">
+            <h5 className="font-bold text-slate-200 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <Clock size={14} className="text-indigo-400" /> Redes & Institucional
+            </h5>
+            <div className="flex flex-col gap-2">
+              <a 
+                href="https://instagram.com/clinica_odontok?igshid=Nzg3NjI1NGI=" 
+                target="_blank" 
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition"
+              >
+                <Camera size={16} /> @clinica.odontok
+              </a>
+              <a 
+                href={LINK_RESPONSAVEIS_TECNICOS}
+                target="_blank" 
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-400 transition text-[11px]"
+              >
+                <FileText size={14} /> Responsáveis Técnicos
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="max-w-5xl mx-auto pt-8 mt-8 border-t border-slate-900 text-center text-[11px] text-slate-500">
+          © {new Date().getFullYear()} Odonto K. Todos os direitos reservados.
+        </div>
+      </footer>
     </div>
   );
 }
