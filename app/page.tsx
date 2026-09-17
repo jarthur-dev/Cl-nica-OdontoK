@@ -40,17 +40,23 @@ const TRATAMENTOS = [
 ];
 
 const UNIDADES = {
-  slm: {
-    id: 'slm',
-    nome: 'São Lourenço da Mata',
-    curto: 'São Lourenço',
-    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K%20-%20Unidade%20São%20Lourenço%20da%20Mata.',
+  slm_camara: {
+    id: 'slm_camara',
+    nome: 'São Lourenço, Camaragibe e Gravatá',
+    curto: 'São Lourenço / Camaragibe',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
   },
-  vitoria: {
-    id: 'vitoria',
-    nome: 'Vitória de Santo Antão',
-    curto: 'Vitória',
-    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K%20-%20Unidade%20Vitória%20de%20Santo%20Antão.',
+  recife: {
+    id: 'recife',
+    nome: 'Casa Amarela e Beberibe',
+    curto: 'Casa Amarela / Beberibe',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
+  },
+  cabo: {
+    id: 'cabo',
+    nome: 'Cabo, Paiva e Ponte dos Carvalhos',
+    curto: 'Cabo / Ponte dos Carvalhos',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
   },
 };
 
@@ -60,27 +66,26 @@ const HORARIOS_FUNCIONAMENTO = [
   { dia: 'Quarta-feira', horario: '08:00–17:00' },
   { dia: 'Quinta-feira', horario: '08:00–17:00' },
   { dia: 'Sexta-feira', horario: '08:00–17:00' },
-  { dia: 'Sábado', horario: '08:00–17:00' },
+  { dia: 'Sábado', horario: '08:00–12:00' },
   { dia: 'Domingo', horario: 'Fechado' },
 ];
 
-const LINK_RESPONSAVEIS_TECNICOS = 'https://drive.google.com/file/d/1K0oN7x12z2V-9r1qDqWr7EyA2ms5Pkhm/view';
-
 export default function Home() {
-  const [unidadeAtiva, setUnidadeAtiva] = useState<'slm' | 'vitoria'>('slm');
+  const [unidadeAtiva, setUnidadeAtiva] = useState<'slm_camara' | 'recife' | 'cabo'>('slm_camara');
   const [estaAberto, setEstaAberto] = useState<boolean>(false);
   const [mostrarHorarios, setMostrarHorarios] = useState<boolean>(false);
 
   const unidadeAtual = UNIDADES[unidadeAtiva];
 
-  // Verifica o horário local para calcular se a clínica está aberta (Seg-Sáb 08:00 às 17:00)
   useEffect(() => {
     const checarStatusAtendimento = () => {
       const agora = new Date();
-      const diaSemana = agora.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+      const diaSemana = agora.getDay();
       const hora = agora.getHours();
 
-      if (diaSemana >= 1 && diaSemana <= 6 && hora >= 8 && hora < 17) {
+      if (diaSemana >= 1 && diaSemana <= 5 && hora >= 8 && hora < 17) {
+        setEstaAberto(true);
+      } else if (diaSemana === 6 && hora >= 8 && hora < 12) {
         setEstaAberto(true);
       } else {
         setEstaAberto(false);
@@ -88,7 +93,7 @@ export default function Home() {
     };
 
     checarStatusAtendimento();
-    const intervalo = setInterval(checarStatusAtendimento, 60000); // Atualiza a cada minuto
+    const intervalo = setInterval(checarStatusAtendimento, 60000);
     return () => clearInterval(intervalo);
   }, []);
 
@@ -98,18 +103,18 @@ export default function Home() {
       {/* Topo Informativo */}
       <div className="bg-slate-900 border-b border-slate-800/80 px-4 py-2 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
         <ShieldCheck size={14} className="text-indigo-400" />
-        <span>Referência em Atendimento Humanizado e Sedação Moderada</span>
+        <span>A melhor rede de clínicas odontológicas de Pernambuco</span>
       </div>
 
       {/* Header Profissional com Dropdown de Horários */}
       <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-6 md:px-12 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-600/20">
-            OK
+            SO
           </div>
           <div>
-            <h1 className="font-bold text-lg text-white leading-tight tracking-tight">Odonto K</h1>
-            <p className="text-xs text-slate-400 font-medium">Clínica Odontológica</p>
+            <h1 className="font-bold text-lg text-white leading-tight tracking-tight">Rede Sorrir Odonto</h1>
+            <p className="text-xs text-slate-400 font-medium">Atendimento Especializado</p>
           </div>
         </div>
 
@@ -128,10 +133,8 @@ export default function Home() {
             <ChevronDown size={14} className={`text-slate-400 transition-transform duration-200 ${mostrarHorarios ? 'rotate-180' : ''}`} />
           </button>
 
-          {/* Modal / Card Flutuante com Quadro de Horários */}
           {mostrarHorarios && (
             <>
-              {/* Overlay invisível para fechar ao clicar fora */}
               <div 
                 className="fixed inset-0 z-40" 
                 onClick={() => setMostrarHorarios(false)} 
@@ -165,7 +168,7 @@ export default function Home() {
       <section className="px-6 md:px-12 py-16 sm:py-20 max-w-4xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider">
           <Award size={14} className="text-indigo-400" />
-          Medicina e Saúde
+          Rede de Odontologia em PE
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white">
@@ -173,36 +176,47 @@ export default function Home() {
         </h2>
 
         <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-          Atendimento odontológico de excelência com todos os tratamentos em um só lugar. Referência em sedação moderada. Selecione a unidade e fale diretamente conosco no WhatsApp.
+          Atendimento odontológico de excelência em diversas regiões de Pernambuco. Selecione a unidade mais próxima de você e fale direto com o atendimento no WhatsApp.
         </p>
 
         {/* Seletor de Unidades */}
-        <div className="pt-4 max-w-sm mx-auto">
+        <div className="pt-4 max-w-md mx-auto">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
-            Onde deseja atendimento?
+            Selecione a região de atendimento:
           </p>
-          <div className="bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex gap-1.5 shadow-inner">
+          <div className="bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row gap-1.5 shadow-inner">
             <button
               type="button"
-              onClick={() => setUnidadeAtiva('slm')}
-              className={`flex-1 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-                unidadeAtiva === 'slm'
+              onClick={() => setUnidadeAtiva('slm_camara')}
+              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                unidadeAtiva === 'slm_camara'
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <MapPin size={15} /> {UNIDADES.slm.curto}
+              <MapPin size={14} /> {UNIDADES.slm_camara.curto}
             </button>
             <button
               type="button"
-              onClick={() => setUnidadeAtiva('vitoria')}
-              className={`flex-1 py-3 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-                unidadeAtiva === 'vitoria'
+              onClick={() => setUnidadeAtiva('recife')}
+              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                unidadeAtiva === 'recife'
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
                   : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
               }`}
             >
-              <MapPin size={15} /> {UNIDADES.vitoria.curto}
+              <MapPin size={14} /> {UNIDADES.recife.curto}
+            </button>
+            <button
+              type="button"
+              onClick={() => setUnidadeAtiva('cabo')}
+              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                unidadeAtiva === 'cabo'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
+              }`}
+            >
+              <MapPin size={14} /> {UNIDADES.cabo.curto}
             </button>
           </div>
         </div>
@@ -234,7 +248,7 @@ export default function Home() {
                     </div>
                     {item.destaque && (
                       <span className="text-[10px] uppercase font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                        Sua referência
+                        Destaque
                       </span>
                     )}
                   </div>
@@ -257,18 +271,17 @@ export default function Home() {
           href={unidadeAtual.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-2xl transition-all duration-200 text-base shadow-xl shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] w-full"
+          className="flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-8 py-4 rounded-2xl transition-all duration-200 text-base shadow-xl shadow-emerald-600/20 hover:scale-[1.02] active:scale-[0.98] w-full text-center"
         >
           <MessageCircle size={20} />
-          Agendar em {unidadeAtual.nome}
+          <span>Agendar em {unidadeAtual.curto}</span>
           <ChevronRight size={18} />
         </a>
 
         <a
-          href={LINK_RESPONSAVEIS_TECNICOS}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-slate-800/80 text-slate-200 border border-slate-800 font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 text-sm hover:border-slate-700 hover:scale-[1.01] active:scale-[0.99] w-full shadow-sm"
+          href="#"
+          onClick={(e) => e.preventDefault()}
+          className="flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-slate-800/80 text-slate-200 border border-slate-800 font-semibold px-6 py-3.5 rounded-2xl transition-all duration-200 text-sm hover:border-slate-700 hover:scale-[1.01] active:scale-[0.99] w-full shadow-sm cursor-default"
         >
           <FileText size={18} className="text-indigo-400" />
           <span>Responsáveis Técnicos</span>
@@ -283,21 +296,22 @@ export default function Home() {
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">
-                OK
+                SO
               </div>
-              <span className="font-bold text-slate-200 text-sm">Odonto K</span>
+              <span className="font-bold text-slate-200 text-sm">Rede Sorrir Odonto</span>
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
-              Cuidado humanizado e atendimento acolhedor. Referência em sedação moderada em Pernambuco.
+              A melhor rede de clínicas odontológicas de Pernambuco. Cuidado humanizado e estrutura completa para sua saúde bucal.
             </p>
           </div>
 
           <div className="space-y-2">
             <h5 className="font-bold text-slate-200 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <MapPin size={14} className="text-indigo-400" /> Unidades Atendidas
+              <MapPin size={14} className="text-indigo-400" /> Regiões Atendidas
             </h5>
-            <p>• São Lourenço da Mata / PE</p>
-            <p>• Vitória de Santo Antão / PE</p>
+            <p>• São Lourenço / Camaragibe / Gravatá</p>
+            <p>• Casa Amarela / Beberibe</p>
+            <p>• Cabo / Paiva / Ponte dos Carvalhos</p>
           </div>
 
           <div className="space-y-3">
@@ -306,18 +320,16 @@ export default function Home() {
             </h5>
             <div className="flex flex-col gap-2">
               <a 
-                href="https://instagram.com/clinica_odontok?igshid=Nzg3NjI1NGI=" 
-                target="_blank" 
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition"
+                href="#" 
+                onClick={(e) => e.preventDefault()}
+                className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition cursor-default"
               >
-                <Camera size={16} /> @clinica.odontok
+                <Camera size={16} /> @redesorrirodonto
               </a>
               <a 
-                href={LINK_RESPONSAVEIS_TECNICOS}
-                target="_blank" 
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-400 transition text-[11px]"
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-400 transition text-[11px] cursor-default"
               >
                 <FileText size={14} /> Responsáveis Técnicos
               </a>
@@ -327,7 +339,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-5xl mx-auto pt-8 mt-8 border-t border-slate-900 text-center text-[11px] text-slate-500">
-          © {new Date().getFullYear()} Odonto K. Todos os direitos reservados.
+          © {new Date().getFullYear()} Rede Sorrir Odonto. Todos os direitos reservados.
         </div>
       </footer>
     </div>
