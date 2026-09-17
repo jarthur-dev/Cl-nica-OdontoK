@@ -324,7 +324,7 @@ export default function Home() {
                 onClick={(e) => e.preventDefault()}
                 className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition cursor-default"
               >
-                <Camera size={16} /> @clinica.odontok
+                <Camera size={16} /> @seu_instagram
               </a>
               <a 
                 href="#"
