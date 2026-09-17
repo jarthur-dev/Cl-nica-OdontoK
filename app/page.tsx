@@ -329,7 +329,7 @@ export default function Home() {
               <a 
                 href="#"
                 onClick={(e) => e.preventDefault()}
-                className="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-400 transition text-[11px] cursor-default"
+                className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition text-[11px] cursor-default"
               >
                 <FileText size={14} /> Responsáveis Técnicos
               </a>
