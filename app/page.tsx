@@ -44,19 +44,19 @@ const UNIDADES = {
     id: 'slm_camara',
     nome: 'São Lourenço, Camaragibe e Gravatá',
     curto: 'São Lourenço / Camaragibe',
-    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K.',
   },
   recife: {
     id: 'recife',
     nome: 'Casa Amarela e Beberibe',
     curto: 'Casa Amarela / Beberibe',
-    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K.',
   },
   cabo: {
     id: 'cabo',
     nome: 'Cabo, Paiva e Ponte dos Carvalhos',
     curto: 'Cabo / Ponte dos Carvalhos',
-    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Rede%20Sorrir%20Odonto.',
+    link: 'https://wa.me/?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta%20na%20Odonto%20K.',
   },
 };
 
@@ -103,18 +103,18 @@ export default function Home() {
       {/* Topo Informativo */}
       <div className="bg-slate-900 border-b border-slate-800/80 px-4 py-2 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
         <ShieldCheck size={14} className="text-indigo-400" />
-        <span>A melhor rede de clínicas odontológicas de Pernambuco</span>
+        <span>Referência em Atendimento Humanizado e Sedação Moderada</span>
       </div>
 
       {/* Header Profissional com Dropdown de Horários */}
       <header className="sticky top-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 px-6 md:px-12 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-600/20">
-            SO
+            OK
           </div>
           <div>
-            <h1 className="font-bold text-lg text-white leading-tight tracking-tight">Rede Sorrir Odonto</h1>
-            <p className="text-xs text-slate-400 font-medium">Atendimento Especializado</p>
+            <h1 className="font-bold text-lg text-white leading-tight tracking-tight">Odonto K</h1>
+            <p className="text-xs text-slate-400 font-medium">Clínica Odontológica</p>
           </div>
         </div>
 
@@ -168,7 +168,7 @@ export default function Home() {
       <section className="px-6 md:px-12 py-16 sm:py-20 max-w-4xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-slate-300 text-xs font-semibold uppercase tracking-wider">
           <Award size={14} className="text-indigo-400" />
-          Rede de Odontologia em PE
+          Medicina e Saúde
         </div>
 
         <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white">
@@ -176,13 +176,13 @@ export default function Home() {
         </h2>
 
         <p className="text-slate-400 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-          Atendimento odontológico de excelência em diversas regiões de Pernambuco. Selecione a unidade mais próxima de você e fale direto com o atendimento no WhatsApp.
+          Atendimento odontológico de excelência com todos os tratamentos em um só lugar. Selecione a unidade e fale diretamente conosco no WhatsApp.
         </p>
 
         {/* Seletor de Unidades */}
         <div className="pt-4 max-w-md mx-auto">
           <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2.5">
-            Selecione a região de atendimento:
+            Onde deseja atendimento?
           </p>
           <div className="bg-slate-900 p-1.5 rounded-2xl border border-slate-800 flex flex-col sm:flex-row gap-1.5 shadow-inner">
             <button
@@ -248,7 +248,7 @@ export default function Home() {
                     </div>
                     {item.destaque && (
                       <span className="text-[10px] uppercase font-bold px-2.5 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                        Destaque
+                        Sua referência
                       </span>
                     )}
                   </div>
@@ -296,18 +296,18 @@ export default function Home() {
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">
-                SO
+                OK
               </div>
-              <span className="font-bold text-slate-200 text-sm">Rede Sorrir Odonto</span>
+              <span className="font-bold text-slate-200 text-sm">Odonto K</span>
             </div>
             <p className="text-slate-400 leading-relaxed text-[11px] sm:text-xs">
-              A melhor rede de clínicas odontológicas de Pernambuco. Cuidado humanizado e estrutura completa para sua saúde bucal.
+              Cuidado humanizado e atendimento acolhedor. Referência em sedação moderada em Pernambuco.
             </p>
           </div>
 
           <div className="space-y-2">
             <h5 className="font-bold text-slate-200 text-xs uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <MapPin size={14} className="text-indigo-400" /> Regiões Atendidas
+              <MapPin size={14} className="text-indigo-400" /> Unidades Atendidas
             </h5>
             <p>• São Lourenço / Camaragibe / Gravatá</p>
             <p>• Casa Amarela / Beberibe</p>
@@ -324,7 +324,7 @@ export default function Home() {
                 onClick={(e) => e.preventDefault()}
                 className="inline-flex items-center gap-2 text-slate-300 hover:text-indigo-400 transition cursor-default"
               >
-                <Camera size={16} /> @redesorrirodonto
+                <Camera size={16} /> @clinica.odontok
               </a>
               <a 
                 href="#"
@@ -339,7 +339,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-5xl mx-auto pt-8 mt-8 border-t border-slate-900 text-center text-[11px] text-slate-500">
-          © {new Date().getFullYear()} Rede Sorrir Odonto. Todos os direitos reservados.
+          © {new Date().getFullYear()} Odonto K. Todos os direitos reservados.
         </div>
       </footer>
     </div>
